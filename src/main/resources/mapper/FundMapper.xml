@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.company_fund.mapper.FundMapper">
+
+
+    <select id="queryFunds" resultType="com.example.company_fund.entity.Fund">
+        select fund_code, fund_short_name, end_date, unit_net_val
+        from qy_fund
+        where end_date in (select max(end_date) as end_date
+                           from qy_fund
+                           group by fund_code)
+    </select>
+
+    <select id="queryFund" resultType="com.example.company_fund.entity.Fund">
+        select fund_code, fund_short_name, end_date, unit_net_val
+        from qy_fund
+        where date_format(#{end_date}, '%Y-%m-%d') = date_format(end_date, '%Y-%m-%d')
+          and #{fund_code} = fund_code
+    </select>
+
+    <select id="queryThisYearFund" resultType="com.example.company_fund.entity.Fund">
+        select fund_code, fund_short_name, end_date, unit_net_val
+        from qy_fund
+        where end_date = (select min(end_date) as end_date
+                          from qy_fund
+                          where date_format(#{end_date}, '%Y') = date_format(end_date, '%Y')
+                            and #{fund_code} = fund_code)
+          and #{fund_code} = fund_code
+
+    </select>
+
+    <select id="queryEarliestYearFund" resultType="com.example.company_fund.entity.Fund">
+        select fund_code, fund_short_name, end_date, unit_net_val
+        from qy_fund
+        where end_date =
+              (select min(end_date)
+               from qy_fund
+               where #{fund_code} = fund_code)
+          and #{fund_code} = fund_code
+    </select>
+</mapper>

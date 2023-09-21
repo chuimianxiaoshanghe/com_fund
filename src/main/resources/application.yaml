@@ -1,0 +1,15 @@
+server:
+  port: 8082
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rm-bp19n5y607121p0xhqo.mysql.rds.aliyuncs.com:3306/qy?useSSL=false&serverTimezone=UTC
+    username: test_user
+    password: Root123456
+
+mybatis-plus:
+  type-aliases-package: com.example.company_fund.entity
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
